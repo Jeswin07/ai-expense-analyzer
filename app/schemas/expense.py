@@ -1,17 +1,22 @@
 from pydantic import BaseModel
 
 
-class ExpenseCreate(BaseModel):
+class ExpenseBase(BaseModel):
     title: str
     amount: float
     category: str
 
 
-class ExpenseResponse(BaseModel):
+class ExpenseCreate(ExpenseBase):
+    pass
+
+
+class ExpenseUpdate(ExpenseBase):
+    pass
+
+
+class ExpenseResponse(ExpenseBase):
     id: int
-    title: str
-    amount: float
-    category: str
 
     class Config:
         from_attributes = True
