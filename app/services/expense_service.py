@@ -25,9 +25,6 @@ def get_all_expenses(db: Session):
     return db.query(Expense).all()
 
 
-from fastapi import HTTPException
-
-
 def get_expense_by_id(db: Session, expense_id: int):
     expense = db.query(Expense).filter(Expense.id == expense_id).first()
 
