@@ -1,6 +1,6 @@
 from app.db.database import Base
 from app.db.database import engine
-from app.models.expense import Expense
+from app.models import expense # pylint: disable=unused-import
 
 
 def create_tables():

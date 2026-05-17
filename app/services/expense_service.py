@@ -1,10 +1,9 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
 from app.models.expense import Expense
 from app.schemas.expense import ExpenseCreate
 from app.schemas.expense import ExpenseUpdate
-
-from fastapi import HTTPException
 
 
 def create_expense(db: Session, expense_data: ExpenseCreate):

@@ -9,6 +9,7 @@ engine = create_engine(
     connect_args={"check_same_thread": False}
 )
 
+# pylint: disable=invalid-name
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
