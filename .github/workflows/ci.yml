@@ -1,0 +1,33 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set Up Python
+        run: uv python install
+
+      - name: Sync Dependencies
+        run: uv sync
+
+      - name: Run Tests
+        run: uv run pytest
+
+      - name: Run Pylint
+        run: uv run pylint app
