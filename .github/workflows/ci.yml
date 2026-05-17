@@ -27,7 +27,7 @@ jobs:
         run: uv sync
 
       - name: Run Tests
-        run: uv run pytest
+        run: uv run -m pytest
 
       - name: Run Pylint
         run: uv run pylint app
