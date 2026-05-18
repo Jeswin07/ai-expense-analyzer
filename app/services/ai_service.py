@@ -38,12 +38,31 @@ def generate_ai_financial_summary(
     Spending Spike Detected:
     {analytics_data["spending_spike_detected"]}
 
+    Monthly Spending Change:
+    {analytics_data["monthly_spending_change_percentage"]}%
+
+    Recurring Expenses:
+    {analytics_data["recurring_expenses"]}
+
+    Budget Warning:
+    {analytics_data["budget_warning"]}
+
+    Financial Health Score:
+    {analytics_data["financial_health_score"]}
+
     Provide:
     1. Spending behavior analysis
     2. Financial risk observations
     3. Budget improvement suggestions
     4. Behavioral spending patterns
     5. Actionable recommendations
+
+    Focus heavily on:
+    - spending habits
+    - recurring financial risks
+    - budget balance
+    - financial discipline
+    - behavioral patterns
 
     Keep response concise but insightful.
     """

@@ -18,4 +18,12 @@ class ExpenseAnalyticsResponse(BaseModel):
 
     spending_spike_detected: bool
 
+    monthly_spending_change_percentage: float
+
+    recurring_expenses: list[str]
+
+    budget_warning: bool
+
+    financial_health_score: int
+
     insight: str
