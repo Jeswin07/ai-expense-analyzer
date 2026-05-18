@@ -8,15 +8,44 @@ def generate_ai_financial_summary(
     analytics_data: dict
 ):
     prompt = f"""
-    You are an intelligent financial assistant.
+    You are an advanced financial behavior analyst.
 
-    Analyze this financial summary:
+    Analyze this financial profile carefully.
 
-    Total Spending: {analytics_data["total_spending"]}
-    Total Expenses: {analytics_data["total_expenses"]}
-    Top Category: {analytics_data["top_category"]}
+    Financial Data:
 
-    Give concise financial insights and recommendations, be concise and dont make it too long.
+    Total Spending:
+    {analytics_data["total_spending"]}
+
+    Total Expenses:
+    {analytics_data["total_expenses"]}
+
+    Top Spending Category:
+    {analytics_data["top_category"]}
+
+    Top Category Percentage:
+    {analytics_data["top_category_percentage"]}%
+
+    Average Daily Spending:
+    {analytics_data["average_daily_spending"]}
+
+    Largest Expense:
+    {analytics_data["largest_expense"]}
+
+    Weekend Spending Percentage:
+    {analytics_data["weekend_spending_percentage"]}%
+
+    Spending Spike Detected:
+    {analytics_data["spending_spike_detected"]}
+
+    Provide:
+    1. Spending behavior analysis
+    2. Financial risk observations
+    3. Budget improvement suggestions
+    4. Behavioral spending patterns
+    5. Actionable recommendations
+
+    Keep response concise but insightful.
     """
 
     payload = {
@@ -25,12 +54,18 @@ def generate_ai_financial_summary(
         "stream": False
     }
 
-    response = httpx.post(
-        OLLAMA_URL,
-        json=payload,
-        timeout=60.0
-    )
+    try:
+        response = httpx.post(
+            OLLAMA_URL,
+            json=payload,
+            timeout=60.0
+        )
 
-    result = response.json()
+        result = response.json()
 
-    return result["response"]
+        return result["response"]
+
+    except httpx.HTTPError:
+        return (
+            "AI service temporarily unavailable."
+        )

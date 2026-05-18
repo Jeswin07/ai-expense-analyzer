@@ -10,7 +10,8 @@ def create_expense(db: Session, expense_data: ExpenseCreate):
     expense = Expense(
         title=expense_data.title,
         amount=expense_data.amount,
-        category=expense_data.category
+        category=expense_data.category,
+        expense_date=expense_data.expense_date
     )
 
     db.add(expense)
