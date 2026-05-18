@@ -1,5 +1,8 @@
-import httpx
+import json
+import re
+from datetime import date
 
+import httpx
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
@@ -88,3 +91,94 @@ def generate_ai_financial_summary(
         return (
             "AI service temporarily unavailable."
         )
+
+
+def extract_expense_from_text(
+    text: str
+):
+    prompt = f"""
+    You are a JSON extraction engine.
+
+    Extract expense data from this text:
+
+    {text}
+
+    STRICT RULES:
+    - Return ONLY raw JSON
+    - No markdown
+    - No explanations
+    - No extra text
+    - Use double quotes only
+    - Ensure valid JSON syntax
+    - Never return placeholder values like YYYY-MM-DD
+    - if no date, or unable to find a correct date use today's date.
+    Today's date is {date.today().isoformat()}
+    Required format:
+
+    {{
+        "title": "Uber",
+        "amount": 18,
+        "category": "Transport",
+        "expense_date": "2026-05-19"
+    }}
+    """
+
+    payload = {
+        "model": "mistral",
+        "prompt": prompt,
+        "stream": False
+    }
+
+    try:
+        response = httpx.post(
+            OLLAMA_URL,
+            json=payload,
+            timeout=60.0
+        )
+
+        result = response.json()
+
+        extracted_text = (
+            result["response"]
+        )
+
+        print(extracted_text)
+
+        cleaned_text = extracted_text.strip()
+
+        cleaned_text = re.sub(
+            r"```json|```",
+            "",
+            cleaned_text
+        ).strip()
+
+        json_match = re.search(
+            r"\{.*\}",
+            cleaned_text,
+            re.DOTALL
+        )
+
+        if not json_match:
+            raise ValueError(
+                "No valid JSON found."
+            )
+
+        parsed_json = json.loads(
+            json_match.group()
+        )
+
+        return parsed_json
+
+    except (
+        json.JSONDecodeError,
+        ValueError,
+        httpx.HTTPError
+    ) as error:
+        print(error)
+
+        return {
+            "title": "Unknown",
+            "amount": 0,
+            "category": "Other",
+            "expense_date": "2026-01-01"
+        }
