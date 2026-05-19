@@ -10,6 +10,10 @@ from app.core.config import settings
 
 def get_client():
 
+    if not settings.groq_api_key:
+
+        return None
+
     return OpenAI(
 
         api_key=settings.groq_api_key,
@@ -17,7 +21,6 @@ def get_client():
         base_url=
             "https://api.groq.com/openai/v1"
     )
-
 
 # ─────────────────────────────────────
 # GENERIC AI CHAT
@@ -28,6 +31,12 @@ def generate_ai_response(
 ) -> str:
     
     client = get_client()
+
+    if client is None:
+
+        return (
+            "AI service unavailable."
+        )
 
     response = (
         client.chat.completions.create(

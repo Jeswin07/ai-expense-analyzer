@@ -264,7 +264,40 @@ def generate_expense_analytics(
     expenses = get_expenses(db)
 
     if not expenses:
-        return generate_empty_analytics()
+
+        return {
+
+            "total_spending": 0,
+
+            "total_expenses": 0,
+
+            "top_category": "None",
+
+            "top_category_percentage": 0,
+
+            "average_daily_spending": 0,
+
+            "largest_expense": "None",
+
+            "weekend_spending_percentage": 0,
+
+            "spending_spike_detected": False,
+
+            "monthly_spending_change_percentage": 0,
+
+            "recurring_expenses": [],
+
+            "budget_warning": False,
+
+            "financial_health_score": 100,
+
+            "insight":
+                "No expense data available.",
+
+            "category_breakdown": {},
+
+            "weekly_trend": []
+        }
 
     total_spending = calculate_total_spending(
         expenses
