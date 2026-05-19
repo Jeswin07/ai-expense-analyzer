@@ -12,7 +12,7 @@ from app.api.nlp import router as nlp_router
 create_tables()
 
 app = FastAPI(
-    title=settings.app_name,
+    title="AI Expense Analyzer v2",
     version=settings.app_version
 )
 
