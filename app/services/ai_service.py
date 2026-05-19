@@ -29,7 +29,7 @@ def get_client():
 def generate_ai_response(
     prompt: str
 ) -> str:
-    
+
     client = get_client()
 
     if client is None:
