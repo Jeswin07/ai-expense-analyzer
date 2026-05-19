@@ -342,6 +342,32 @@ def generate_expense_analytics(
         recurring_expenses
     )
 
+    category_breakdown = {
+        category: round(amount, 2)
+        for category, amount
+        in category_totals.items()
+    }
+
+    weekly_totals = defaultdict(float)
+
+    for expense in expenses:
+        week_number = (
+            expense.expense_date.isocalendar()[1]
+        )
+
+        weekly_totals[
+            f"Week {week_number}"
+        ] += float(expense.amount)
+
+    weekly_trend = [
+        {
+            "week": week,
+            "amount": round(amount, 2)
+        }
+        for week, amount
+        in weekly_totals.items()
+    ]
+
     return {
         "total_spending": round(
             total_spending,
@@ -368,5 +394,7 @@ def generate_expense_analytics(
         "financial_health_score":
             financial_health_score,
         "insight":
-            insight
+            insight,
+        "category_breakdown": category_breakdown,
+        "weekly_trend": weekly_trend,
     }

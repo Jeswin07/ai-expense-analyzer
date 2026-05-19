@@ -1,150 +1,173 @@
 import json
 import re
+
 from datetime import date
 
-import httpx
+from openai import OpenAI
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
+from app.core.config import settings
 
+
+client = OpenAI(
+
+    api_key=settings.groq_api_key,
+
+    base_url=
+        "https://api.groq.com/openai/v1"
+)
+
+
+# ─────────────────────────────────────
+# GENERIC AI CHAT
+# ─────────────────────────────────────
+
+def generate_ai_response(
+    prompt: str
+) -> str:
+
+    response = (
+        client.chat.completions.create(
+
+            model=
+                "llama-3.3-70b-versatile",
+
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+
+            temperature=0.3,
+        )
+    )
+
+    return (
+        response
+        .choices[0]
+        .message
+        .content
+        .strip()
+    )
+
+
+# ─────────────────────────────────────
+# AI FINANCIAL SUMMARY
+# ─────────────────────────────────────
 
 def generate_ai_financial_summary(
     analytics_data: dict
 ):
+
     prompt = f"""
-    You are an advanced financial behavior analyst.
+Analyze this financial profile.
 
-    Analyze this financial profile carefully.
+Total spending:
+₹{analytics_data["total_spending"]}
 
-    Financial Data:
+Total expenses:
+{analytics_data["total_expenses"]}
 
-    Total Spending:
-    {analytics_data["total_spending"]}
+Top category:
+{analytics_data["top_category"]}
 
-    Total Expenses:
-    {analytics_data["total_expenses"]}
+Top category percentage:
+{analytics_data["top_category_percentage"]}%
 
-    Top Spending Category:
-    {analytics_data["top_category"]}
+Average daily spending:
+₹{analytics_data["average_daily_spending"]}
 
-    Top Category Percentage:
-    {analytics_data["top_category_percentage"]}%
+Largest expense:
+₹{analytics_data["largest_expense"]}
 
-    Average Daily Spending:
-    {analytics_data["average_daily_spending"]}
+Weekend spending:
+{analytics_data["weekend_spending_percentage"]}%
 
-    Largest Expense:
-    {analytics_data["largest_expense"]}
+Monthly spending change:
+{analytics_data["monthly_spending_change_percentage"]}%
 
-    Weekend Spending Percentage:
-    {analytics_data["weekend_spending_percentage"]}%
+Recurring expenses:
+{analytics_data["recurring_expenses"]}
 
-    Spending Spike Detected:
-    {analytics_data["spending_spike_detected"]}
+Budget warning:
+{analytics_data["budget_warning"]}
 
-    Monthly Spending Change:
-    {analytics_data["monthly_spending_change_percentage"]}%
+Financial health score:
+{analytics_data["financial_health_score"]}/100
 
-    Recurring Expenses:
-    {analytics_data["recurring_expenses"]}
+Provide:
+1. Spending behavior analysis
+2. Risk observations
+3. Budget suggestions
+4. Financial discipline insights
+5. Actionable recommendations
 
-    Budget Warning:
-    {analytics_data["budget_warning"]}
-
-    Financial Health Score:
-    {analytics_data["financial_health_score"]}
-
-    Provide:
-    1. Spending behavior analysis
-    2. Financial risk observations
-    3. Budget improvement suggestions
-    4. Behavioral spending patterns
-    5. Actionable recommendations
-
-    Focus heavily on:
-    - spending habits
-    - recurring financial risks
-    - budget balance
-    - financial discipline
-    - behavioral patterns
-
-    Keep response concise but insightful.
-    """
-
-    payload = {
-        "model": "mistral",
-        "prompt": prompt,
-        "stream": False
-    }
+Keep response concise and practical.
+"""
 
     try:
-        response = httpx.post(
-            OLLAMA_URL,
-            json=payload,
-            timeout=60.0
+
+        return generate_ai_response(
+            prompt
         )
 
-        result = response.json()
+    except (
+        json.JSONDecodeError,
+        ValueError,
+        TypeError,
+        KeyError
+    ) as error:
 
-        return result["response"]
+        print(error)
 
-    except httpx.HTTPError:
         return (
-            "AI service temporarily unavailable."
+            "AI summary temporarily unavailable."
         )
 
+
+# ─────────────────────────────────────
+# NLP EXPENSE EXTRACTION
+# ─────────────────────────────────────
 
 def extract_expense_from_text(
     text: str
 ):
+
     prompt = f"""
-    You are a JSON extraction engine.
+Extract expense data from this text.
 
-    Extract expense data from this text:
+Text:
+{text}
 
-    {text}
+Return ONLY valid JSON.
 
-    STRICT RULES:
-    - Return ONLY raw JSON
-    - No markdown
-    - No explanations
-    - No extra text
-    - Use double quotes only
-    - Ensure valid JSON syntax
-    - Never return placeholder values like YYYY-MM-DD
-    - if no date, or unable to find a correct date use today's date.
-    Today's date is {date.today().isoformat()}
-    Required format:
+Format:
+{{
+  "title": "Uber",
+  "amount": 18,
+  "category": "Transport",
+  "expense_date": "{date.today().isoformat()}"
+}}
 
-    {{
-        "title": "Uber",
-        "amount": 18,
-        "category": "Transport",
-        "expense_date": "2026-05-19"
-    }}
-    """
-
-    payload = {
-        "model": "mistral",
-        "prompt": prompt,
-        "stream": False
-    }
+Rules:
+- Use double quotes
+- No markdown
+- No explanation
+- Use today's date if missing
+"""
 
     try:
-        response = httpx.post(
-            OLLAMA_URL,
-            json=payload,
-            timeout=60.0
-        )
-
-        result = response.json()
 
         extracted_text = (
-            result["response"]
+            generate_ai_response(prompt)
         )
 
         print(extracted_text)
 
-        cleaned_text = extracted_text.strip()
+        cleaned_text = (
+            extracted_text
+            .strip()
+        )
 
         cleaned_text = re.sub(
             r"```json|```",
@@ -159,6 +182,7 @@ def extract_expense_from_text(
         )
 
         if not json_match:
+
             raise ValueError(
                 "No valid JSON found."
             )
@@ -167,18 +191,40 @@ def extract_expense_from_text(
             json_match.group()
         )
 
+        required_fields = [
+            "title",
+            "amount",
+            "category",
+            "expense_date"
+        ]
+
+        for field in required_fields:
+
+            if field not in parsed_json:
+
+                raise ValueError(
+                    f"Missing field: {field}"
+                )
+
+        parsed_json["amount"] = float(
+            parsed_json["amount"]
+        )
+
         return parsed_json
 
     except (
         json.JSONDecodeError,
         ValueError,
-        httpx.HTTPError
+        TypeError,
+        KeyError
     ) as error:
+
         print(error)
 
         return {
             "title": "Unknown",
             "amount": 0,
             "category": "Other",
-            "expense_date": "2026-01-01"
+            "expense_date":
+                date.today().isoformat()
         }

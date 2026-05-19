@@ -27,3 +27,7 @@ class ExpenseAnalyticsResponse(BaseModel):
     financial_health_score: int
 
     insight: str
+
+    category_breakdown: dict
+
+    weekly_trend: list[dict]

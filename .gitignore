@@ -5,3 +5,6 @@ __pycache__/
 .pytest_cache/
 .vscode/
 *.db
+*.pem
+node_modules/
+.DS_Store
