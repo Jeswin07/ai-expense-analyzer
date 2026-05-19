@@ -8,13 +8,15 @@ from openai import OpenAI
 from app.core.config import settings
 
 
-client = OpenAI(
+def get_client():
 
-    api_key=settings.groq_api_key,
+    return OpenAI(
 
-    base_url=
-        "https://api.groq.com/openai/v1"
-)
+        api_key=settings.groq_api_key,
+
+        base_url=
+            "https://api.groq.com/openai/v1"
+    )
 
 
 # ─────────────────────────────────────
@@ -24,6 +26,8 @@ client = OpenAI(
 def generate_ai_response(
     prompt: str
 ) -> str:
+    
+    client = get_client()
 
     response = (
         client.chat.completions.create(
