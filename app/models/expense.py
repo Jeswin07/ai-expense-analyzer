@@ -35,6 +35,37 @@ class Expense(Base):
         nullable=False
     )
 
+
+    department = Column(
+        String,
+        nullable=True
+    )
+
+    vendor = Column(
+        String,
+        nullable=True
+    )
+
+    expense_type = Column(
+        String,
+        nullable=True
+    )
+
+    payment_method = Column(
+        String,
+        nullable=True
+    )
+
+    gst_amount = Column(
+        Float,
+        default=0
+    )
+
+    invoice_id = Column(
+        String,
+        nullable=True
+    )
+
     expense_date = Column(
         Date,
         default=date.today,
