@@ -13,13 +13,18 @@ def get_expenses(db: Session):
 
 
 def calculate_total_spending(expenses):
-    return sum(expense.amount for expense in expenses)
+    return sum(
+        expense.amount
+        for expense in expenses
+    )
 
 
 def calculate_category_totals(expenses):
+
     category_totals = defaultdict(float)
 
     for expense in expenses:
+
         category_totals[
             expense.category
         ] += expense.amount
@@ -27,10 +32,49 @@ def calculate_category_totals(expenses):
     return category_totals
 
 
+# NEW BUSINESS ANALYTICS
+
+def calculate_department_totals(expenses):
+
+    department_totals = defaultdict(float)
+
+    for expense in expenses:
+
+        department = (
+            expense.department
+            or "Unknown"
+        )
+
+        department_totals[
+            department
+        ] += expense.amount
+
+    return department_totals
+
+
+def calculate_vendor_totals(expenses):
+
+    vendor_totals = defaultdict(float)
+
+    for expense in expenses:
+
+        vendor = (
+            expense.vendor
+            or "Unknown"
+        )
+
+        vendor_totals[
+            vendor
+        ] += expense.amount
+
+    return vendor_totals
+
+
 def calculate_top_category(
     category_totals,
     total_spending
 ):
+
     top_category = max(
         category_totals,
         key=category_totals.get
@@ -54,6 +98,7 @@ def calculate_average_daily_spending(
     expenses,
     total_spending
 ):
+
     unique_days = {
         expense.expense_date
         for expense in expenses
@@ -66,9 +111,11 @@ def calculate_average_daily_spending(
 
 
 def get_largest_expense(expenses):
+
     return max(
         expenses,
-        key=lambda expense: expense.amount
+        key=lambda expense:
+            expense.amount
     ).title
 
 
@@ -76,9 +123,13 @@ def calculate_weekend_spending_percentage(
     expenses,
     total_spending
 ):
+
     weekend_spending = sum(
+
         expense.amount
+
         for expense in expenses
+
         if expense.expense_date.weekday() >= 5
     )
 
@@ -92,6 +143,7 @@ def calculate_weekend_spending_percentage(
 
 
 def detect_spending_spike(expenses):
+
     amounts = [
         expense.amount
         for expense in expenses
@@ -108,13 +160,14 @@ def detect_spending_spike(expenses):
 def calculate_monthly_spending_change(
     expenses
 ):
+
     latest_date = max(
         expense.expense_date
         for expense in expenses
     )
 
-    current_month_start = latest_date.replace(
-        day=1
+    current_month_start = (
+        latest_date.replace(day=1)
     )
 
     previous_month_end = (
@@ -127,15 +180,21 @@ def calculate_monthly_spending_change(
     )
 
     current_month_spending = sum(
+
         expense.amount
+
         for expense in expenses
+
         if expense.expense_date
         >= current_month_start
     )
 
     previous_month_spending = sum(
+
         expense.amount
+
         for expense in expenses
+
         if previous_month_start
         <= expense.expense_date
         <= previous_month_end
@@ -157,15 +216,21 @@ def calculate_monthly_spending_change(
 
 
 def detect_recurring_expenses(expenses):
+
     title_counter = Counter(
+
         expense.title.lower()
+
         for expense in expenses
     )
 
     return [
+
         title
+
         for title, count
         in title_counter.items()
+
         if count >= 3
     ]
 
@@ -173,7 +238,10 @@ def detect_recurring_expenses(expenses):
 def calculate_budget_warning(
     top_category_percentage
 ):
-    return top_category_percentage > 40
+
+    return (
+        top_category_percentage > 40
+    )
 
 
 def calculate_financial_health_score(
@@ -182,6 +250,7 @@ def calculate_financial_health_score(
     budget_warning,
     monthly_spending_change_percentage
 ):
+
     financial_health_score = 100
 
     if spending_spike_detected:
@@ -196,7 +265,62 @@ def calculate_financial_health_score(
     if monthly_spending_change_percentage > 20:
         financial_health_score -= 10
 
-    return max(financial_health_score, 0)
+    return max(
+        financial_health_score,
+        0
+    )
+
+
+# NEW BUSINESS KPI FUNCTIONS
+
+def calculate_top_department(
+    department_totals
+):
+
+    if not department_totals:
+        return "Unknown"
+
+    return max(
+        department_totals,
+        key=department_totals.get
+    )
+
+
+def calculate_top_vendor(
+    vendor_totals
+):
+
+    if not vendor_totals:
+        return "Unknown"
+
+    return max(
+        vendor_totals,
+        key=vendor_totals.get
+    )
+
+
+def calculate_monthly_burn_rate(
+    total_spending
+):
+
+    return round(
+        total_spending,
+        2
+    )
+
+
+def calculate_budget_utilization(
+    total_spending,
+    assumed_budget=500000
+):
+
+    return round(
+        (
+            total_spending
+            / assumed_budget
+        ) * 100,
+        2
+    )
 
 
 def generate_insight(
@@ -207,60 +331,47 @@ def generate_insight(
     monthly_spending_change_percentage,
     recurring_expenses
 ):
+
     insights = []
 
     insights.append(
+
         f"{top_category} accounts for "
         f"{top_category_percentage}% "
-        f"of your spending."
+        f"of operational spending."
     )
 
     if spending_spike_detected:
+
         insights.append(
-            "Large spending spikes detected."
+            "Operational spending spikes detected."
         )
 
     if weekend_spending_percentage > 50:
+
         insights.append(
-            "Weekend spending is unusually high."
+            "Weekend operational expenses are unusually high."
         )
 
     if monthly_spending_change_percentage > 20:
+
         insights.append(
-            "Monthly spending increased significantly."
+            "Monthly operational costs increased significantly."
         )
 
     if recurring_expenses:
+
         insights.append(
-            "Recurring spending patterns identified."
+            "Recurring vendor spending patterns identified."
         )
 
     return " ".join(insights)
 
 
-def generate_empty_analytics():
-    return {
-        "total_spending": 0,
-        "total_expenses": 0,
-        "top_category": "None",
-        "top_category_percentage": 0,
-        "average_daily_spending": 0,
-        "largest_expense": "None",
-        "weekend_spending_percentage": 0,
-        "spending_spike_detected": False,
-        "monthly_spending_change_percentage": 0,
-        "recurring_expenses": [],
-        "budget_warning": False,
-        "financial_health_score": 100,
-        "insight": (
-            "No expense data available."
-        )
-    }
-
-
 def generate_expense_analytics(
     db: Session
 ):
+
     expenses = get_expenses(db)
 
     if not expenses:
@@ -268,7 +379,6 @@ def generate_expense_analytics(
         return {
 
             "total_spending": 0,
-
             "total_expenses": 0,
 
             "top_category": "None",
@@ -296,22 +406,41 @@ def generate_expense_analytics(
 
             "category_breakdown": {},
 
-            "weekly_trend": []
+            "weekly_trend": [],
+
+            # NEW BUSINESS KPIs
+
+            "top_department": "Unknown",
+
+            "top_vendor": "Unknown",
+
+            "monthly_burn_rate": 0,
+
+            "budget_utilization": 0
         }
 
-    total_spending = calculate_total_spending(
-        expenses
+    total_spending = (
+        calculate_total_spending(expenses)
     )
 
     total_expenses = len(expenses)
 
-    category_totals = calculate_category_totals(
-        expenses
+    category_totals = (
+        calculate_category_totals(expenses)
+    )
+
+    department_totals = (
+        calculate_department_totals(expenses)
+    )
+
+    vendor_totals = (
+        calculate_vendor_totals(expenses)
     )
 
     (
         top_category,
         top_category_percentage
+
     ) = calculate_top_category(
         category_totals,
         total_spending
@@ -324,8 +453,8 @@ def generate_expense_analytics(
         )
     )
 
-    largest_expense = get_largest_expense(
-        expenses
+    largest_expense = (
+        get_largest_expense(expenses)
     )
 
     weekend_spending_percentage = (
@@ -376,7 +505,9 @@ def generate_expense_analytics(
     )
 
     category_breakdown = {
+
         category: round(amount, 2)
+
         for category, amount
         in category_totals.items()
     }
@@ -384,8 +515,10 @@ def generate_expense_analytics(
     weekly_totals = defaultdict(float)
 
     for expense in expenses:
+
         week_number = (
-            expense.expense_date.isocalendar()[1]
+            expense.expense_date
+            .isocalendar()[1]
         )
 
         weekly_totals[
@@ -393,41 +526,100 @@ def generate_expense_analytics(
         ] += float(expense.amount)
 
     weekly_trend = [
+
         {
             "week": week,
             "amount": round(amount, 2)
         }
+
         for week, amount
         in weekly_totals.items()
     ]
 
+    # NEW BUSINESS KPIs
+
+    top_department = (
+        calculate_top_department(
+            department_totals
+        )
+    )
+
+    top_vendor = (
+        calculate_top_vendor(
+            vendor_totals
+        )
+    )
+
+    monthly_burn_rate = (
+        calculate_monthly_burn_rate(
+            total_spending
+        )
+    )
+
+    budget_utilization = (
+        calculate_budget_utilization(
+            total_spending
+        )
+    )
+
     return {
-        "total_spending": round(
-            total_spending,
-            2
-        ),
-        "total_expenses": total_expenses,
-        "top_category": top_category,
+
+        "total_spending":
+            round(total_spending, 2),
+
+        "total_expenses":
+            total_expenses,
+
+        "top_category":
+            top_category,
+
         "top_category_percentage":
             top_category_percentage,
+
         "average_daily_spending":
             average_daily_spending,
+
         "largest_expense":
             largest_expense,
+
         "weekend_spending_percentage":
             weekend_spending_percentage,
+
         "spending_spike_detected":
             spending_spike_detected,
+
         "monthly_spending_change_percentage":
             monthly_spending_change_percentage,
+
         "recurring_expenses":
             recurring_expenses,
+
         "budget_warning":
             budget_warning,
+
         "financial_health_score":
             financial_health_score,
+
         "insight":
             insight,
-        "category_breakdown": category_breakdown,
-        "weekly_trend": weekly_trend,
+
+        "category_breakdown":
+            category_breakdown,
+
+        "weekly_trend":
+            weekly_trend,
+
+        # NEW BUSINESS KPIs
+
+        "top_department":
+            top_department,
+
+        "top_vendor":
+            top_vendor,
+
+        "monthly_burn_rate":
+            monthly_burn_rate,
+
+        "budget_utilization":
+            budget_utilization,
     }

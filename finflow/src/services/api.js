@@ -24,16 +24,55 @@ api.interceptors.response.use(
 
 // ─── MOCK DATA ──────────────────────────────────────────────────────────────
 let mockExpenses = [
-  { id: 1, title: 'Grocery Shopping',   amount: 127.50, category: 'Food',          expense_date: '2025-05-15' },
-  { id: 2, title: 'Spotify Premium',    amount: 9.99,   category: 'Entertainment', expense_date: '2025-05-14' },
-  { id: 3, title: 'Electric Bill',      amount: 88.00,  category: 'Utilities',     expense_date: '2025-05-13' },
-  { id: 4, title: 'Coffee & Lunch',     amount: 34.20,  category: 'Food',          expense_date: '2025-05-12' },
-  { id: 5, title: 'Gym Membership',     amount: 45.00,  category: 'Health',        expense_date: '2025-05-11' },
-  { id: 6, title: 'Uber Rides',         amount: 62.40,  category: 'Transport',     expense_date: '2025-05-10' },
-  { id: 7, title: 'Amazon Purchase',    amount: 156.00, category: 'Shopping',      expense_date: '2025-05-09' },
-  { id: 8, title: 'Internet Plan',      amount: 59.99,  category: 'Utilities',     expense_date: '2025-05-08' },
-  { id: 9, title: 'Movie Tickets',      amount: 28.50,  category: 'Entertainment', expense_date: '2025-05-07' },
-  { id: 10, title: 'Doctor Visit',      amount: 75.00,  category: 'Health',        expense_date: '2025-05-06' },
+  {
+    id: 1,
+    title: 'AWS EC2 Production Servers',
+    amount: 14500,
+    category: 'Cloud Infrastructure',
+    expense_date: '2026-05-15',
+  },
+  {
+    id: 2,
+    title: 'Meta Ads Campaign',
+    amount: 22000,
+    category: 'Marketing',
+    expense_date: '2026-05-14',
+  },
+  {
+    id: 3,
+    title: 'Office Internet - Jio Business',
+    amount: 4200,
+    category: 'Utilities',
+    expense_date: '2026-05-13',
+  },
+  {
+    id: 4,
+    title: 'Razorpay Subscription',
+    amount: 5999,
+    category: 'Software',
+    expense_date: '2026-05-12',
+  },
+  {
+    id: 5,
+    title: 'Employee Travel Reimbursement',
+    amount: 8500,
+    category: 'Travel',
+    expense_date: '2026-05-11',
+  },
+  {
+    id: 6,
+    title: 'Laptop Procurement',
+    amount: 68000,
+    category: 'Procurement',
+    expense_date: '2026-05-10',
+  },
+  {
+    id: 7,
+    title: 'Payroll Processing',
+    amount: 125000,
+    category: 'Payroll',
+    expense_date: '2026-05-09',
+  }
 ]
 let mockNextId = 11
 

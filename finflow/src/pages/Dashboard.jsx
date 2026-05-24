@@ -7,7 +7,9 @@ import StatCard from '../components/StatCard'
 import SpendingPieChart from '../components/SpendingPieChart'
 import SpendingBarChart from '../components/SpendingBarChart'
 
-import { analyticsService } from '../services/api'
+import {
+  analyticsService
+} from '../services/api'
 
 export default function Dashboard() {
 
@@ -47,7 +49,21 @@ export default function Dashboard() {
             data.category_breakdown || [],
 
           weeklyTrend:
-            data.weekly_trend || []
+            data.weekly_trend || [],
+
+          // NEW BUSINESS KPIs
+
+          topDepartment:
+            data.top_department || 'IT',
+
+          burnRate:
+            data.monthly_burn_rate || 0,
+
+          topVendor:
+            data.top_vendor || 'AWS India',
+
+          budgetUtilization:
+            data.budget_utilization || 72
         }
 
         setData(normalizedData)
@@ -73,6 +89,7 @@ export default function Dashboard() {
   if (loading) {
 
     return (
+
       <div className="
         flex items-center
         justify-center
@@ -86,7 +103,7 @@ export default function Dashboard() {
           text-blue-500
         " />
 
-        Loading analytics…
+        Loading business analytics…
 
       </div>
     )
@@ -95,6 +112,7 @@ export default function Dashboard() {
   if (error) {
 
     return (
+
       <div className="
         flex items-center gap-2
         text-red-400 text-sm p-4
@@ -117,24 +135,30 @@ export default function Dashboard() {
 
     <div className="animate-fade-in">
 
+      {/* Header */}
+
       <div className="mb-7">
 
         <h1 className="
           text-xl font-semibold
           text-dark-100
         ">
-          Financial Overview
+
+          Business Financial Intelligence
+
         </h1>
 
         <p className="
           text-sm text-dark-300 mt-1
         ">
-          AI-powered financial intelligence
+
+          AI-powered operational expense analytics for Indian SMEs
+
         </p>
 
       </div>
 
-      {/* Stat Cards */}
+      {/* Primary KPI Cards */}
 
       <div className="
         grid grid-cols-2
@@ -143,35 +167,77 @@ export default function Dashboard() {
       ">
 
         <StatCard
-          icon="ti-credit-card"
-          label="Total Spending"
+          icon="ti-currency-rupee"
+          label="Operational Expense"
           value={`₹${data.totalSpending.toFixed(2)}`}
-          sub="All expenses"
+          sub="Total business expenditure"
           color="#3b82f6"
         />
 
         <StatCard
-          icon="ti-tag"
-          label="Top Category"
-          value={data.topCategory}
-          sub="Largest spending area"
+          icon="ti-building-bank"
+          label="Top Department"
+          value={data.topDepartment}
+          sub="Highest operational spend"
           color="#8b5cf6"
         />
 
         <StatCard
-          icon="ti-heartbeat"
-          label="Health Score"
-          value={`${data.healthScore}/100`}
-          sub="Financial wellness"
-          color="#10b981"
+          icon="ti-flame"
+          label="Monthly Burn Rate"
+          value={`₹${data.burnRate.toFixed(2)}`}
+          sub="Projected monthly spend"
+          color="#ef4444"
         />
 
         <StatCard
-          icon="ti-trending-up"
-          label="Avg Daily"
-          value={`₹${data.avgDailySpending.toFixed(2)}`}
-          sub="Average daily spend"
+          icon="ti-report-money"
+          label="Budget Utilization"
+          value={`${data.budgetUtilization}%`}
+          sub="Operational budget usage"
+          color="#10b981"
+        />
+
+      </div>
+
+      {/* Secondary KPI Cards */}
+
+      <div className="
+        grid grid-cols-2
+        lg:grid-cols-4
+        gap-3 mb-5
+      ">
+
+        <StatCard
+          icon="ti-tag"
+          label="Top Expense Category"
+          value={data.topCategory}
+          sub="Largest cost center"
           color="#f59e0b"
+        />
+
+        <StatCard
+          icon="ti-building-store"
+          label="Top Vendor"
+          value={data.topVendor}
+          sub="Highest vendor spend"
+          color="#06b6d4"
+        />
+
+        <StatCard
+          icon="ti-heartbeat"
+          label="Financial Health"
+          value={`${data.healthScore}/100`}
+          sub="Business financial score"
+          color="#22c55e"
+        />
+
+        <StatCard
+          icon="ti-chart-line"
+          label="Avg Daily Spend"
+          value={`₹${data.avgDailySpending.toFixed(2)}`}
+          sub="Average operational cost"
+          color="#f97316"
         />
 
       </div>

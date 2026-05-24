@@ -12,24 +12,26 @@ import {
 
 const CATEGORIES = [
   'All',
-  'Food',
-  'Entertainment',
-  'Utilities',
-  'Health',
-  'Transport',
-  'Shopping',
+  'Cloud Infrastructure',
+  'Marketing',
+  'Software',
+  'Operations',
   'Travel',
+  'Payroll',
+  'Utilities',
+  'Procurement',
   'Other',
 ]
 
 const CAT_COLORS = {
-  Food: '#3b82f6',
-  Entertainment: '#8b5cf6',
-  Utilities: '#10b981',
-  Health: '#f59e0b',
-  Transport: '#ef4444',
-  Shopping: '#06b6d4',
-  Travel: '#f97316',
+  'Cloud Infrastructure': '#3b82f6',
+  Marketing: '#8b5cf6',
+  Software: '#10b981',
+  Operations: '#f59e0b',
+  Travel: '#ef4444',
+  Payroll: '#06b6d4',
+  Utilities: '#f97316',
+  Procurement: '#14b8a6',
   Other: '#6b7280',
 }
 
@@ -223,7 +225,7 @@ export default function Expenses() {
             text-xl font-semibold
             text-dark-100
           ">
-            Expenses
+            Business Expenses
           </h1>
 
           <p className="
@@ -256,7 +258,7 @@ export default function Expenses() {
             ti ti-plus text-base
           " />
 
-          Add Expense
+          Add Business Expense
 
         </button>
 
@@ -376,14 +378,18 @@ export default function Expenses() {
 
         <div className="
           grid
-          grid-cols-[1fr_110px_110px_100px_72px]
+          grid-cols-[1.4fr_120px_120px_120px_110px_100px_72px]
           px-4 py-3
           border-b border-dark-600
           text-xs text-dark-300
           uppercase tracking-wider
         ">
 
-          <span>Title</span>
+          <span>Expense</span>
+
+          <span>Department</span>
+
+          <span>Vendor</span>
 
           <span>Category</span>
 
@@ -447,13 +453,13 @@ export default function Expenses() {
 
               className={`
                 grid
-                grid-cols-[1fr_110px_110px_100px_72px]
+                grid-cols-[1.4fr_120px_120px_120px_110px_100px_72px]
                 px-4 py-3.5
                 items-center
                 hover:bg-blue-500/5
                 transition-colors
 
-                ₹{
+                ${
                   index < filtered.length - 1
                     ? 'border-b border-dark-600'
                     : ''
@@ -470,6 +476,24 @@ export default function Expenses() {
 
               </span>
 
+              <span className="
+                text-sm text-dark-200
+                truncate
+              ">
+
+                {expense.department || '—'}
+
+              </span>
+
+              <span className="
+                text-sm text-dark-200
+                truncate
+              ">
+
+                {expense.vendor || '—'}
+
+              </span>
+
               <span>
 
                 <span
@@ -483,7 +507,7 @@ export default function Expenses() {
 
                   style={{
                     background:
-                      `₹{
+                      `${
                         CAT_COLORS[
                           expense.category
                         ]

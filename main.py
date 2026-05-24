@@ -8,6 +8,7 @@ from app.db.init_db import create_tables
 from app.api.analytics import router as analytics_router
 from app.api.ai import router as ai_router
 from app.api.nlp import router as nlp_router
+from app.api.vendor_segmentation import router as vendor_segmentation_router
 
 create_tables()
 
@@ -33,3 +34,4 @@ app.include_router(expense_router)
 app.include_router(analytics_router)
 app.include_router(ai_router)
 app.include_router(nlp_router)
+app.include_router(vendor_segmentation_router)
