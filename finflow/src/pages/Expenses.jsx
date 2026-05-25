@@ -10,6 +10,8 @@ import {
   expenseService
 } from '../services/api'
 
+import CSVUpload from '../components/CSVUpload'
+
 const CATEGORIES = [
   'All',
   'Cloud Infrastructure',
@@ -263,6 +265,16 @@ export default function Expenses() {
         </button>
 
       </div>
+
+      {/* CSV Upload */}
+
+      <CSVUpload
+
+        onUploadSuccess={() => {
+
+          load()
+        }}
+      />
 
       {/* Filters */}
 

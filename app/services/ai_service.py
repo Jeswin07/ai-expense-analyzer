@@ -8,6 +8,10 @@ from openai import OpenAI
 from app.core.config import settings
 
 
+# ─────────────────────────────────────
+# CLIENT INITIALIZATION
+# ─────────────────────────────────────
+
 def get_client():
 
     if not settings.groq_api_key:
@@ -22,8 +26,9 @@ def get_client():
             "https://api.groq.com/openai/v1"
     )
 
+
 # ─────────────────────────────────────
-# GENERIC AI CHAT
+# GENERIC AI RESPONSE
 # ─────────────────────────────────────
 
 def generate_ai_response(
@@ -39,23 +44,44 @@ def generate_ai_response(
         )
 
     response = (
+
         client.chat.completions.create(
 
             model=
                 "llama-3.3-70b-versatile",
 
             messages=[
+
+                {
+                    "role": "system",
+
+                    "content":
+                        (
+                            "You are a senior "
+                            "enterprise business "
+                            "intelligence analyst "
+                            "specializing in "
+                            "financial operations, "
+                            "predictive analytics, "
+                            "vendor optimization, "
+                            "and operational risk "
+                            "analysis."
+                        )
+                },
+
                 {
                     "role": "user",
+
                     "content": prompt
                 }
             ],
 
-            temperature=0.3,
+            temperature=0.25,
         )
     )
 
     return (
+
         response
         .choices[0]
         .message
@@ -65,57 +91,197 @@ def generate_ai_response(
 
 
 # ─────────────────────────────────────
-# AI FINANCIAL SUMMARY
+# AI BUSINESS INSIGHTS
 # ─────────────────────────────────────
 
-def generate_ai_financial_summary(
-    analytics_data: dict
+def generate_ai_business_insights(
+
+    analytics_data: dict,
+
+    forecasting_data: dict,
+
+    vendor_data: list,
+
+    anomaly_data: list
 ):
 
+    # =================================
+    # TOP VENDORS
+    # =================================
+
+    top_vendors = sorted(
+
+        vendor_data,
+
+        key=lambda item:
+            item["total_spend"],
+
+        reverse=True
+
+    )[:5]
+
+    vendor_summary = [
+
+        (
+            f'{item["vendor"]}'
+            f' (₹{item["total_spend"]:,.0f})'
+        )
+
+        for item in top_vendors
+    ]
+
+    # =================================
+    # FORECAST SUMMARY
+    # =================================
+
+    forecast_summary = forecasting_data.get(
+
+        "insight",
+
+        "No forecasting insight available."
+    )
+
+    # =================================
+    # ANOMALY SUMMARY
+    # =================================
+
+    anomaly_count = len(
+        anomaly_data
+    )
+
+    high_risk_count = len([
+
+        item
+
+        for item in anomaly_data
+
+        if abs(item.get(
+            "z_score",
+            0
+        )) > 3
+    ])
+
+    # =================================
+    # CATEGORY BREAKDOWN
+    # =================================
+
+    category_breakdown = analytics_data.get(
+        "category_breakdown",
+        {}
+    )
+
+    top_categories = sorted(
+
+        category_breakdown.items(),
+
+        key=lambda item:
+            item[1],
+
+        reverse=True
+    )[:3]
+
+    category_summary = [
+
+        (
+            f"{category}"
+            f" (₹{amount:,.0f})"
+        )
+
+        for category, amount in top_categories
+    ]
+
+    # =================================
+    # BUILD EXECUTIVE PROMPT
+    # =================================
+
     prompt = f"""
-Analyze this financial profile.
+You are a senior enterprise business intelligence consultant.
 
-Total spending:
-₹{analytics_data["total_spending"]}
+Analyze the following operational financial data and generate executive-level business intelligence insights.
 
-Total expenses:
+━━━━━━━━━━━━━━━━━━
+ENTERPRISE ANALYTICS
+━━━━━━━━━━━━━━━━━━
+
+Total Operational Spending:
+₹{analytics_data["total_spending"]:,.0f}
+
+Total Expense Records:
 {analytics_data["total_expenses"]}
 
-Top category:
+Top Spending Categories:
+{category_summary}
+
+Top Operational Category:
 {analytics_data["top_category"]}
 
-Top category percentage:
+Top Category Contribution:
 {analytics_data["top_category_percentage"]}%
 
-Average daily spending:
-₹{analytics_data["average_daily_spending"]}
+Average Daily Operational Spend:
+₹{analytics_data["average_daily_spending"]:,.0f}
 
-Largest expense:
-₹{analytics_data["largest_expense"]}
-
-Weekend spending:
-{analytics_data["weekend_spending_percentage"]}%
-
-Monthly spending change:
+Monthly Spending Trend:
 {analytics_data["monthly_spending_change_percentage"]}%
 
-Recurring expenses:
+Recurring Operational Expenses:
 {analytics_data["recurring_expenses"]}
 
-Budget warning:
-{analytics_data["budget_warning"]}
-
-Financial health score:
+Financial Health Score:
 {analytics_data["financial_health_score"]}/100
 
-Provide:
-1. Spending behavior analysis
-2. Risk observations
-3. Budget suggestions
-4. Financial discipline insights
-5. Actionable recommendations
+━━━━━━━━━━━━━━━━━━
+FORECASTING
+━━━━━━━━━━━━━━━━━━
 
-Keep response concise and practical.
+{forecast_summary}
+
+━━━━━━━━━━━━━━━━━━
+VENDOR INTELLIGENCE
+━━━━━━━━━━━━━━━━━━
+
+Top Vendors:
+{vendor_summary}
+
+━━━━━━━━━━━━━━━━━━
+ANOMALY DETECTION
+━━━━━━━━━━━━━━━━━━
+
+Detected Operational Anomalies:
+{anomaly_count}
+
+High Risk Operational Events:
+{high_risk_count}
+
+━━━━━━━━━━━━━━━━━━
+RESPONSE FORMAT
+━━━━━━━━━━━━━━━━━━
+
+Generate the response using EXACTLY these sections:
+
+## Executive Summary
+
+## Operational Spending Analysis
+
+## Forecast & Trend Analysis
+
+## Vendor Intelligence
+
+## Risk Assessment
+
+## Strategic Recommendations
+
+Requirements:
+- Executive business tone
+- Concise but insightful
+- Mention operational efficiency
+- Mention optimization opportunities
+- Mention vendor concentration risk
+- Mention forecast direction
+- Mention anomaly implications
+- Mention cost management recommendations
+- Use clear business language
+- Maximum 450 words
 """
 
     try:
@@ -125,16 +291,21 @@ Keep response concise and practical.
         )
 
     except (
+
         json.JSONDecodeError,
+
         ValueError,
+
         TypeError,
+
         KeyError
+
     ) as error:
 
         print(error)
 
         return (
-            "AI summary temporarily unavailable."
+            "AI business insights temporarily unavailable."
         )
 
 
@@ -147,7 +318,7 @@ def extract_expense_from_text(
 ):
 
     prompt = f"""
-Extract expense data from this text.
+Extract operational expense data from this business text.
 
 Text:
 {text}
@@ -156,17 +327,19 @@ Return ONLY valid JSON.
 
 Format:
 {{
-  "title": "Uber",
-  "amount": 18,
-  "category": "Transport",
+  "title": "AWS EC2 Billing",
+  "amount": 12000,
+  "category": "Cloud Infrastructure",
   "expense_date": "{date.today().isoformat()}"
 }}
 
 Rules:
+- Return only JSON
 - Use double quotes
 - No markdown
 - No explanation
 - Use today's date if missing
+- Use business-oriented categories
 """
 
     try:
@@ -175,22 +348,26 @@ Rules:
             generate_ai_response(prompt)
         )
 
-        print(extracted_text)
-
         cleaned_text = (
             extracted_text
             .strip()
         )
 
         cleaned_text = re.sub(
+
             r"```json|```",
+
             "",
+
             cleaned_text
         ).strip()
 
         json_match = re.search(
+
             r"\{.*\}",
+
             cleaned_text,
+
             re.DOTALL
         )
 
@@ -205,9 +382,13 @@ Rules:
         )
 
         required_fields = [
+
             "title",
+
             "amount",
+
             "category",
+
             "expense_date"
         ]
 
@@ -226,18 +407,30 @@ Rules:
         return parsed_json
 
     except (
+
         json.JSONDecodeError,
+
         ValueError,
+
         TypeError,
+
         KeyError
+
     ) as error:
 
         print(error)
 
         return {
-            "title": "Unknown",
-            "amount": 0,
-            "category": "Other",
+
+            "title":
+                "Unknown Expense",
+
+            "amount":
+                0,
+
+            "category":
+                "Operations",
+
             "expense_date":
                 date.today().isoformat()
         }

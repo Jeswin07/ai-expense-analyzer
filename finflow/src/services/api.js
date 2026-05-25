@@ -170,3 +170,30 @@ export const aiService = {
   getSummary:     ()     => USE_MOCK ? mockAPI.getAiSummary()         : api.get('/ai/summary'),
   extractExpense: (text) => USE_MOCK ? mockAPI.extractExpense(text)    : api.post('/nlp/extract-expense', { text }),
 }
+
+export const csvImportService = {
+
+  uploadCSV: async (file) => {
+
+    const formData = new FormData()
+
+    formData.append(
+      'file',
+      file
+    )
+
+    return axios.post(
+
+      'http://127.0.0.1:8000/csv-import/',
+
+      formData,
+
+      {
+        headers: {
+          'Content-Type':
+            'multipart/form-data'
+        }
+      }
+    )
+  }
+}

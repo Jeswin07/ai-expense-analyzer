@@ -1,9 +1,30 @@
 import React from 'react'
 
 const NAV = [
-  { id: 'dashboard', icon: 'ti-layout-dashboard', label: 'Dashboard' },
-  { id: 'expenses',  icon: 'ti-receipt',           label: 'Expenses'  },
-  { id: 'ai',        icon: 'ti-sparkles',          label: 'AI Insights' },
+
+  {
+    id: 'dashboard',
+    icon: 'ti-layout-dashboard',
+    label: 'Dashboard'
+  },
+
+  {
+    id: 'expenses',
+    icon: 'ti-receipt',
+    label: 'Expenses'
+  },
+
+  {
+    id: 'intelligence',
+    icon: 'ti-brain',
+    label: 'Business Intelligence'
+  },
+
+  {
+    id: 'ai',
+    icon: 'ti-sparkles',
+    label: 'AI Insights'
+  },
 ]
 
 export default function Sidebar({ active, setActive }) {

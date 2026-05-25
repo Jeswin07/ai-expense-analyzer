@@ -622,4 +622,15 @@ def generate_expense_analytics(
 
         "budget_utilization":
             budget_utilization,
+
+        "expenses": [
+            {
+                "category": expense.category,
+                "amount": expense.amount,
+                "expense_date":
+                    expense.expense_date.isoformat()
+            }
+
+            for expense in expenses
+        ],
     }

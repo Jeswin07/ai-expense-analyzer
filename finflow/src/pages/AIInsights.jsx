@@ -1,105 +1,451 @@
-import React, { useEffect, useState } from 'react'
+import React, {
+  useEffect,
+  useState
+} from 'react'
+
 import StatCard from '../components/StatCard'
 import NLPPanel from '../components/NLPPanel'
-import { aiService } from '../services/api'
 
-function AISummaryCard({ summary }) {
-  const paragraphs = summary.split('\n\n').filter(Boolean)
+import {
+  aiService
+} from '../services/api'
 
-  const renderParagraph = (p, i) => {
-    const hasBullets = p.includes('\n-')
-    if (hasBullets) {
-      const [header, ...lines] = p.split('\n')
-      return (
-        <div key={i} className="mb-5">
-          {header && (
-            <div className="text-sm font-semibold text-dark-100 mb-2">
-              {header.replace(/\*\*/g, '')}
-            </div>
-          )}
-          <ul className="space-y-2">
-            {lines.map((line, j) => (
-              <li key={j} className="flex gap-2 items-start text-sm text-dark-200 leading-relaxed">
-                <span className="text-blue-400 mt-0.5 flex-shrink-0">›</span>
-                {line.replace(/^- /, '').replace(/\*\*/g, '')}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
-    return (
-      <p key={i} className="text-sm text-dark-200 leading-relaxed mb-4">
-        {p.replace(/\*\*/g, '')}
-      </p>
-    )
-  }
+
+function AISummaryCard({
+
+  summary
+}) {
+
+  // Split sections
+
+  const sections = summary
+
+    .split('##')
+
+    .filter(Boolean)
 
   return (
-    <div className="bg-dark-700 border border-dark-500 rounded-xl p-6">
-      <div className="flex items-center gap-3 mb-5">
-        <div className="w-9 h-9 rounded-xl bg-purple-500/15 flex items-center justify-center flex-shrink-0">
-          <i className="ti ti-brain text-purple-400 text-lg" />
+
+    <div className="
+      bg-dark-700
+      border border-dark-500
+      rounded-2xl
+      p-6
+    ">
+
+      {/* Header */}
+
+      <div className="
+        flex items-center
+        gap-4 mb-6
+      ">
+
+        <div className="
+          w-11 h-11
+          rounded-xl
+          bg-violet-500/15
+          flex items-center
+          justify-center
+          flex-shrink-0
+        ">
+
+          <i className="
+            ti ti-brain
+            text-violet-400
+            text-xl
+          " />
+
         </div>
+
         <div>
-          <div className="text-sm font-semibold text-dark-100">Monthly Financial Analysis</div>
-          <div className="text-xs text-dark-300">Generated · May 2025</div>
+
+          <div className="
+            text-base font-semibold
+            text-dark-100
+          ">
+
+            Executive Business Intelligence
+
+          </div>
+
+          <div className="
+            text-xs text-dark-300
+            mt-1
+          ">
+
+            AI-generated operational analytics and strategic recommendations
+
+          </div>
+
         </div>
+
       </div>
-      {paragraphs.map(renderParagraph)}
+
+      {/* Sections */}
+
+      <div className="
+        space-y-6
+      ">
+
+        {sections.map(
+
+          (section, index) => {
+
+            const lines = section
+              .trim()
+              .split('\n')
+
+            const title =
+              lines[0]
+
+            const content =
+              lines
+                .slice(1)
+                .join('\n')
+                .trim()
+
+            const bulletPoints =
+              content
+                .split('\n')
+                .filter(Boolean)
+
+            return (
+
+              <div
+
+                key={index}
+
+                className="
+                  bg-dark-800
+                  border border-dark-500
+                  rounded-xl
+                  p-5
+                "
+              >
+
+                {/* Section Title */}
+
+                <div className="
+                  flex items-center
+                  gap-2 mb-4
+                ">
+
+                  <div className="
+                    w-2 h-2 rounded-full
+                    bg-blue-400
+                  " />
+
+                  <div className="
+                    text-sm font-semibold
+                    text-dark-100
+                  ">
+
+                    {title}
+
+                  </div>
+
+                </div>
+
+                {/* Content */}
+
+                <div className="
+                  space-y-3
+                ">
+
+                  {bulletPoints.map(
+
+                    (point, pointIndex) => (
+
+                      <div
+
+                        key={pointIndex}
+
+                        className="
+                          flex gap-3
+                          items-start
+                          text-sm
+                          text-dark-200
+                          leading-relaxed
+                        "
+                      >
+
+                        <span className="
+                          text-blue-400
+                          mt-0.5
+                          flex-shrink-0
+                        ">
+
+                          ›
+
+                        </span>
+
+                        <span>
+
+                          {point
+                            .replace(/\*\*/g, '')
+                            .replace(/^- /, '')
+                            .trim()
+                          }
+
+                        </span>
+
+                      </div>
+                    )
+                  )}
+
+                </div>
+
+              </div>
+            )
+          }
+        )}
+
+      </div>
+
     </div>
   )
 }
 
+
 export default function AIInsights() {
-  const [summary, setSummary] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [error, setError]     = useState('')
+
+  const [summary, setSummary] =
+    useState('')
+
+  const [loading, setLoading] =
+    useState(true)
+
+  const [error, setError] =
+    useState('')
 
   useEffect(() => {
-    aiService.getSummary()
-      .then(({ data }) => setSummary(data.ai_summary || ""))
-      .catch(() => setError('Failed to load AI summary'))
-      .finally(() => setLoading(false))
+
+    aiService
+      .getSummary()
+
+      .then(({ data }) => {
+
+        setSummary(
+          data.ai_summary || ''
+        )
+      })
+
+      .catch((error) => {
+
+        console.error(error)
+
+        setError(
+          'Failed to generate AI business insights.'
+        )
+      })
+
+      .finally(() => {
+
+        setLoading(false)
+      })
+
   }, [])
 
   return (
-    <div className="animate-fade-in">
+
+    <div className="
+      animate-fade-in
+    ">
+
+      {/* Header */}
+
       <div className="mb-7">
-        <h1 className="text-xl font-semibold text-dark-100">AI Insights</h1>
-        <p className="text-sm text-dark-300 mt-1">Powered by financial intelligence</p>
+
+        <h1 className="
+          text-2xl
+          font-semibold
+          text-dark-100
+        ">
+
+          AI Business Intelligence
+
+        </h1>
+
+        <p className="
+          text-sm
+          text-dark-300
+          mt-1
+        ">
+
+          AI-generated operational analytics, forecasting insights, and strategic business recommendations
+
+        </p>
+
       </div>
 
-      {/* Health metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
-        <StatCard icon="ti-heartbeat"    label="Health Score" value="74/100"  sub="Above average"  color="#10b981" />
-        <StatCard icon="ti-piggy-bank"   label="Savings Rate" value="18.2%"   sub="Target: 20%"    color="#3b82f6" />
-        <StatCard icon="ti-shield-check" label="Risk Level"   value="Low"     sub="Well managed"   color="#8b5cf6" />
+      {/* Executive Metrics */}
+
+      <div className="
+        grid grid-cols-1
+        md:grid-cols-3
+        gap-3 mb-5
+      ">
+
+        <StatCard
+
+          icon="ti-building-bank"
+
+          label="Operational Efficiency"
+
+          value="87/100"
+
+          sub="Business performance"
+
+          color="#10b981"
+        />
+
+        <StatCard
+
+          icon="ti-alert-triangle"
+
+          label="Risk Exposure"
+
+          value="Moderate"
+
+          sub="Vendor concentration"
+
+          color="#f59e0b"
+        />
+
+        <StatCard
+
+          icon="ti-trending-up"
+
+          label="Forecast Trend"
+
+          value="Growth"
+
+          sub="Projected expansion"
+
+          color="#3b82f6"
+        />
+
       </div>
 
       {/* AI Summary */}
+
       {loading ? (
-        <div className="flex items-center justify-center py-16 text-dark-300 gap-2 text-sm bg-dark-700 border border-dark-500 rounded-xl mb-5">
-          <i className="ti ti-loader-2 animate-spin text-purple-400" /> Generating analysis…
+
+        <div className="
+          flex items-center
+          justify-center
+          py-16
+          text-dark-300
+          gap-3
+          text-sm
+          bg-dark-700
+          border border-dark-500
+          rounded-2xl
+          mb-5
+        ">
+
+          <i className="
+            ti ti-loader-2
+            animate-spin
+            text-violet-400
+            text-xl
+          " />
+
+          Generating executive business intelligence...
+
         </div>
+
       ) : error ? (
-        <div className="text-red-400 text-sm p-4 bg-red-500/10 border border-red-500/20 rounded-xl mb-5">
-          <i className="ti ti-alert-circle mr-2" />{error}
+
+        <div className="
+          text-red-300
+          text-sm
+          p-5
+          bg-red-500/10
+          border border-red-500/20
+          rounded-2xl
+          mb-5
+        ">
+
+          <i className="
+            ti ti-alert-circle
+            mr-2
+          " />
+
+          {error}
+
         </div>
+
       ) : (
+
         <div className="mb-5">
-          <AISummaryCard summary={summary} />
+
+          <AISummaryCard
+            summary={summary}
+          />
+
         </div>
+
       )}
 
-      {/* NLP panel */}
-      <div className="bg-dark-700 border border-dark-500 rounded-xl p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <i className="ti ti-message-dots text-blue-400" />
-          <div className="text-sm font-semibold text-dark-100">Natural Language Expense Input</div>
+      {/* NLP Panel */}
+
+      <div className="
+        bg-dark-700
+        border border-dark-500
+        rounded-2xl
+        p-6
+      ">
+
+        <div className="
+          flex items-center
+          gap-3 mb-5
+        ">
+
+          <div className="
+            w-10 h-10
+            rounded-xl
+            bg-blue-500/10
+            flex items-center
+            justify-center
+            text-blue-400
+          ">
+
+            <i className="
+              ti ti-message-dots
+              text-xl
+            " />
+
+          </div>
+
+          <div>
+
+            <div className="
+              text-sm font-semibold
+              text-dark-100
+            ">
+
+              AI Operational Expense Extraction
+
+            </div>
+
+            <div className="
+              text-xs text-dark-300
+              mt-1
+            ">
+
+              Convert natural language business transactions into structured operational expense records
+
+            </div>
+
+          </div>
+
         </div>
+
         <NLPPanel />
+
       </div>
+
     </div>
   )
 }

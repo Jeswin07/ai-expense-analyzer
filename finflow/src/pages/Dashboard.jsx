@@ -51,6 +51,9 @@ export default function Dashboard() {
           weeklyTrend:
             data.weekly_trend || [],
 
+          expenses:
+            data.expenses || [],
+
           // NEW BUSINESS KPIs
 
           topDepartment:
@@ -248,10 +251,11 @@ export default function Dashboard() {
         grid grid-cols-1
         md:grid-cols-2
         gap-4
+        items-stretch
       ">
 
         <SpendingPieChart
-          data={data.categoryBreakdown}
+          expenses={data.expenses || []}
         />
 
         <SpendingBarChart
