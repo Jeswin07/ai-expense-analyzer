@@ -1,6 +1,6 @@
-import pandas as pd
-
 from io import StringIO
+
+import pandas as pd
 
 from fastapi import APIRouter
 from fastapi import Depends

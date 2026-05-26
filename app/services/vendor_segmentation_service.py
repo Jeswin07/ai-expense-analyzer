@@ -62,7 +62,7 @@ def get_vendor_segmentation(
             ]
         ])
 
-    X = np.array(features)
+    x_train = np.array(features)
 
     # Prevent clustering issues
 
@@ -77,7 +77,7 @@ def get_vendor_segmentation(
         n_init=10
     )
 
-    clusters = model.fit_predict(X)
+    clusters = model.fit_predict(x_train)
 
     segment_labels = {
         0: "Operational Vendors",
