@@ -1,148 +1,146 @@
-# FinFlow AI — AI-Powered Expense Analyzer
+# FinFlow AI — AI-Powered Business Intelligence & Operational Analytics Platform
 
 ## Overview
+FinFlow AI is a full-stack AI-powered Business Intelligence and Operational Analytics platform designed to help organizations analyze operational expenses, monitor financial health, detect anomalies, forecast future spending, and generate AI-driven business insights.
 
-FinFlow AI is a full-stack AI-powered expense analysis platform that helps users track expenses, analyze spending behavior, and generate intelligent financial insights using Large Language Models (LLMs).
+The platform combines:
+* Enterprise expense management
+* AI-powered financial intelligence
+* Predictive analytics & forecasting
+* Operational KPI analysis
+* Natural language expense extraction
+* Business Intelligence dashboards
+* Cloud-native deployment workflows
+* CI/CD automation pipelines
 
-The application combines:
+FinFlow AI was built to simulate production-style software engineering and enterprise analytics workflows using modern full-stack architecture, AI integration, DevOps automation, and scalable backend design.
 
-* AI-powered natural language expense extraction
-* Financial analytics and spending summaries
-* Cloud deployment and CI/CD automation
-* Full-stack frontend and backend architecture
+## Key Features
 
-The project was built to explore real-world software engineering practices including:
+### Enterprise Expense Management
+* Create, update, and delete operational expenses
+* Department-wise expense tracking
+* Vendor-level operational analysis
+* GST and invoice management
+* Payment method tracking
+* Category-based operational spending analysis
+* Search and filtering capabilities
 
-* Version control
-* Code quality enforcement
-* Automated testing
-* Continuous Integration/Continuous Deployment (CI/CD)
-* Cloud infrastructure deployment
-* Dockerized backend deployment
-* AI integration workflows
+### AI-Powered Natural Language Expense Extraction
+Users can describe expenses naturally. 
+**Examples:**
+> "Spent ₹18,500 on AWS cloud hosting"
+> "Paid ₹3,200 for office internet"
+> "Marketing campaign cost ₹45,000"
+> "Uber ride for ₹450 yesterday"
 
----
-
-# Features
-
-## Expense Management
-
-* Create expenses manually
-* Update existing expenses
-* Delete expenses
-* Search and filter expenses
-* Category-based expense tracking
-
-## AI Expense Extraction
-
-Users can describe expenses in natural language:
-
-Examples:
-
-* "Spent ₹350 on dinner yesterday"
-* "Paid ₹220 for Uber ride"
-* "Amazon order for ₹999"
-
-The AI system extracts:
-
-* Title
+**The AI system automatically extracts:**
+* Expense title
 * Amount
-* Category
+* Expense category
 * Expense date
 
-## Financial Analytics
+*Powered by: Groq API, Llama 3.3 70B*
 
-* Total spending
-* Top spending category
-* Average daily spending
-* Category breakdown visualization
-* Weekly spending trends
+### Business Intelligence & Analytics
+**Operational KPIs**
+* Total operational spending
 * Financial health score
+* Average daily operational expenditure
+* Top spending category
+* Department-level analytics
+* Vendor spending intelligence
+* Monthly burn-rate analysis
+* Budget utilization tracking
 
-## AI Financial Insights
+### Predictive Analytics & Forecasting
+The platform includes AI-powered operational forecasting:
+* Historical operational trend analysis
+* Future expense forecasting
+* Confidence interval visualization
+* Monthly projection analytics
+* Operational trend prediction
 
-The AI engine analyzes:
+**Forecasting dashboards include:**
+* Historical vs forecast visualization
+* Upper/lower confidence bounds
+* Enterprise-style BI charts
 
-* Spending behavior
-* Financial discipline
-* Risk observations
-* Budget patterns
-* Recurring spending habits
-* Personalized financial suggestions
+### AI Financial Intelligence
+AI-generated business insights include:
+* Spending behavior analysis
+* Budget risk analysis
+* Operational anomaly detection
+* Financial discipline evaluation
+* Vendor spending intelligence
+* Recurring operational expense detection
+* AI-generated optimization suggestions
 
-## Production Infrastructure
+### Operational Anomaly Detection
+The platform automatically identifies:
+* Unusual spending spikes
+* Operational outliers
+* Budget anomalies
+* High-risk transactions
+* Suspicious operational patterns
 
-* Dockerized backend
-* AWS EC2 deployment
-* Nginx reverse proxy
-* Automated CI/CD pipeline
-* GitHub Actions deployment automation
+### Vendor Intelligence & Segmentation
+Vendor analytics engine provides:
+* Vendor segmentation analysis
+* Vendor spend distribution
+* High-value vendor identification
+* Operational procurement insights
 
----
+### CSV Data Ingestion Pipeline
+Supports enterprise-scale operational data ingestion:
+* Bulk CSV upload
+* Automated operational data processing
+* Structured expense ingestion
+* Large-scale analytics processing
+* User-specific data ownership
 
-# Tech Stack
+### Authentication & Security
+* JWT-based authentication
+* Protected API routes
+* User-specific analytics
+* Secure token-based authorization
+* Environment-based secret management
 
-## Frontend
+## Tech Stack
+* **Frontend:** React, Vite, Tailwind CSS, Axios, Recharts, React Router DOM
+* **Backend:** FastAPI, SQLAlchemy, Pydantic, PostgreSQL, JWT Authentication
+* **AI & Machine Learning:** Groq API, Llama 3.3 70B, Scikit-learn, Time-series forecasting, Operational anomaly detection, Predictive analytics pipelines
+* **DevOps & Cloud Infrastructure:** Docker, GitHub Actions, AWS EC2, Nginx, Linux (Ubuntu), CI/CD Automation
+* **Testing & Code Quality:** pytest, pylint, GitHub Actions CI pipeline
 
-* React
-* Vite
-* Tailwind CSS
-* Axios
-* Recharts
-
-## Backend
-
-* FastAPI
-* SQLAlchemy
-* Pydantic
-* SQLite
-
-## AI Integration
-
-* Groq API
-* Llama 3.3 70B
-
-## DevOps & Cloud
-
-* Docker
-* GitHub Actions
-* AWS EC2
-* Nginx
-* Linux (Ubuntu)
-
-## Testing & Code Quality
-
-* pytest
-* pylint
-
----
-
-# System Architecture
+## System Architecture
 
 ```text
-React Frontend (Vercel)
+React Frontend
         ↓
-Nginx Reverse Proxy
+Protected API Layer
         ↓
-FastAPI Backend (Docker Container)
+FastAPI Backend
         ↓
-SQLite Database
+Business Intelligence Engine
         ↓
-Groq AI API
+PostgreSQL Database
+        ↓
+AI/ML Analytics Services
+        ↓
+Groq LLM API
 ```
 
----
+## CI/CD Pipeline
+The platform implements automated Continuous Integration and Continuous Deployment workflows using GitHub Actions.
 
-# CI/CD Pipeline
-
-The project implements automated Continuous Integration and Continuous Deployment using GitHub Actions.
-
-## CI Flow
-
+**Continuous Integration:**
 ```text
 Git Push
    ↓
 GitHub Actions
+   ↓
+Install Dependencies
    ↓
 Run pytest
    ↓
@@ -151,8 +149,7 @@ Run pylint
 Validate Build
 ```
 
-## CD Flow
-
+**Continuous Deployment:**
 ```text
 Git Push
    ↓
@@ -160,17 +157,14 @@ GitHub Actions
    ↓
 SSH into AWS EC2
    ↓
-Pull latest code
+Pull Latest Code
    ↓
-Rebuild Docker container
+Rebuild Docker Containers
    ↓
-Restart FastAPI application
+Restart FastAPI Services
 ```
 
----
-
-# Project Structure
-
+## Project Structure
 ```text
 ai-expense-analyzer/
 │
@@ -192,211 +186,151 @@ ai-expense-analyzer/
 └── README.md
 ```
 
----
+## Local Development Setup
 
-# Local Development Setup
+### Backend Setup
 
-## Backend Setup
-
-### Clone Repository
-
+**1. Clone Repository**
 ```bash
 git clone <repository-url>
 cd ai-expense-analyzer
 ```
 
-### Install Dependencies
-
+**2. Install Dependencies**
 ```bash
 uv sync
 ```
 
-### Configure Environment Variables
-
+**3. Configure Environment Variables**
 Create a `.env` file:
-
 ```env
+DATABASE_URL=postgresql://postgres:password@localhost:5432/finflow_ai
+SECRET_KEY=your_secret_key
 GROQ_API_KEY=your_groq_api_key
 ```
 
-### Start Backend
-
+**4. Start Backend**
 ```bash
 uv run uvicorn main:app --reload
 ```
+*Backend runs on: `http://127.0.0.1:8000`*
 
-Backend runs on:
-
-```text
-http://127.0.0.1:8000
-```
-
----
-
-## Frontend Setup
-
+### Frontend Setup
 ```bash
 cd finflow
 npm install
 npm run dev
 ```
+*Frontend runs on: `http://localhost:3000`*
 
-Frontend runs on:
+## Docker Deployment
 
-```text
-http://localhost:3000
-```
-
----
-
-# Docker Deployment
-
-## Build Docker Image
-
+**Build Docker Image:**
 ```bash
-sudo docker build -t ai-expense-analyzer .
+sudo docker build -t finflow-ai .
 ```
 
-## Run Container
-
+**Run Docker Container:**
 ```bash
 sudo docker run -d \
--p 8000:8000 \
---env-file .env \
---name ai-expense-app \
-ai-expense-analyzer
+  -p 8000:8000 \
+  --env-file .env \
+  --name finflow-ai \
+  finflow-ai
 ```
 
----
-
-# AWS EC2 Deployment
-
-The backend is deployed on:
-
-* Ubuntu EC2 instance
-* Docker containerized environment
+## AWS EC2 Deployment
+Deployment architecture includes:
+* Ubuntu EC2 server
+* Dockerized FastAPI backend
 * Nginx reverse proxy
+* Automated CI/CD deployment
+* GitHub Actions integration
 
-Deployment includes:
-
-* Automated GitHub Actions deployment
-* Docker rebuild automation
-* Production container restart
+Production deployment supports:
+* Automated container rebuilds
+* Production API restart workflows
+* Secure environment variable management
 * Reverse proxy routing
 
----
+## API Endpoints
 
-# Testing
+### Authentication APIs
+* `POST /auth/register`
+* `POST /auth/login`
 
-## Run Unit Tests
-
-```bash
-uv run -m pytest
-```
-
-## Run Pylint
-
-```bash
-uv run pylint app
-```
-
----
-
-# API Endpoints
-
-## Expense APIs
-
+### Expense APIs
 * `GET /expenses`
 * `POST /expenses`
 * `PUT /expenses/{id}`
 * `DELETE /expenses/{id}`
 
-## Analytics APIs
-
+### Analytics APIs
 * `GET /analytics/summary`
 
-## AI APIs
-
+### AI APIs
 * `GET /ai/summary`
 * `POST /nlp/extract-expense`
 
----
+### Business Intelligence APIs
+* `GET /forecasting`
+* `GET /vendor-segmentation`
+* `GET /anomaly-detection`
 
-# Key Engineering Learnings
+### CSV Import APIs
+* `POST /csv-import`
 
-This project helped explore:
+## Testing
 
-## Software Engineering
+**Run Unit Tests:**
+```bash
+uv run -m pytest
+```
 
-* Full-stack architecture
-* API design
-* State management
-* Modular backend structure
+**Run Pylint:**
+```bash
+uv run pylint app
+```
 
-## DevOps & Deployment
-
-* Docker containerization
-* Linux server management
-* AWS EC2 deployment
-* Reverse proxy architecture
-* CI/CD automation
-
-## AI Engineering
-
-* LLM integration
-* Prompt engineering
-* Structured JSON extraction
-* AI-powered analytics
-
-## Code Quality
-
-* Unit testing with pytest
-* Static analysis using pylint
-* CI validation workflows
-
----
-
-# Future Improvements
-
-Potential future enhancements:
-
-* User authentication
-* PostgreSQL migration
-* HTTPS + SSL setup
-* Budget tracking system
-* Recurring expense detection
-* Export reports (PDF/Excel)
-* Kubernetes deployment
-* Monitoring and logging
-
----
+## Engineering Concepts Explored
+* **Software Engineering:** Full-stack architecture, REST API design, protected routing, authentication workflows, modular backend structure, enterprise dashboard architecture.
+* **AI Engineering:** LLM integration, prompt engineering, structured JSON extraction, AI-generated financial insights, NLP-based expense parsing.
+* **Machine Learning & Analytics:** Time-series forecasting, operational anomaly detection, vendor segmentation, predictive analytics, KPI intelligence systems.
+* **DevOps & Deployment:** Docker containerization, Linux server management, AWS EC2 deployment, reverse proxy architecture, GitHub Actions automation, CI/CD workflows.
 
 ## Screenshots
 
-### Dashboard
-![Dashboard View](assets/dashboard.png)
-*Overview of total spending, top categories, and financial health score.*
+### Authentication Dashboard
+![Authentication Dashboard](assets/auth-dashboard.png)
+
+### Operational Analytics Dashboard
+![Operational Analytics Dashboard](assets/operational-analytics.png)
 
 ### Expense Management
-![Expense Management](assets/expenses.png)
-*Interface for adding, editing, and tracking individual expenses.*
+![Expense Management](assets/expense-management.png)
 
-### NLP Extraction Feature
-![NLP Extraction](assets/nlp-extraction.png)
-*AI automatically parsing natural language text into structured expense data.*
+### Business Intelligence Forecasting
+![Business Intelligence Forecasting](assets/bi-forecasting.png)
 
-### AI Insights
-![AI Insights](assets/ai-insights.png)
-*Personalized financial suggestions and spending pattern analysis.*
+### AI Financial Insights
+![AI Financial Insights](assets/ai-insights.png)
 
----
+### NLP Expense Extraction
+![NLP Expense Extraction](assets/nlp-extraction.png)
 
-# Author
+## Future Improvements
+Potential future enhancements:
+* Kubernetes deployment
+* Real-time streaming analytics
+* Role-based access control
+* Multi-tenant architecture
+* Advanced AI forecasting models
+* Monitoring & observability
+* PDF/Excel reporting
+* WebSocket real-time dashboards
 
+## Author
 Jeswin K Reji
 
----
-
-# License
-
-This project is for educational and portfolio purposes.
+## License
+Built for portfolio, learning, and production-style software engineering exploration.

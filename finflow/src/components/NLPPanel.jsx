@@ -72,7 +72,7 @@ export default function NLPPanel() {
       to backend database
       */
 
-      await expenseService.createExpense({
+      await expenseService.create({
 
         title:
           data.title,
@@ -156,7 +156,7 @@ export default function NLPPanel() {
         onKeyDown={handleKey}
 
         placeholder={
-          'e.g. "Spent $45 on groceries yesterday"'
+          'e.g. "Spent ₹45 on groceries yesterday"'
         }
 
         rows={3}
@@ -363,7 +363,7 @@ export default function NLPPanel() {
                   ">
 
                     {key === 'amount'
-                      ? `$${Number(value).toFixed(2)}`
+                      ? `₹${Number(value).toFixed(2)}`
                       : value}
 
                   </div>

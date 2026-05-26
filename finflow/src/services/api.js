@@ -93,7 +93,18 @@ export const aiService = {
 
   getSummary: () =>
 
-    API.get('/ai/summary')
+    API.get(
+      '/ai/summary'
+    ),
+
+  extractExpense: (text) =>
+
+    API.post(
+
+      '/nlp/extract-expense',
+
+      { text }
+    )
 }
 
 
