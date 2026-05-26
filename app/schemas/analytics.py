@@ -31,3 +31,5 @@ class ExpenseAnalyticsResponse(BaseModel):
     category_breakdown: dict
 
     weekly_trend: list[dict]
+
+    expenses: list[dict]
