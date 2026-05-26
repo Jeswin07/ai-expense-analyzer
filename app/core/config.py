@@ -7,8 +7,13 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
     debug: bool = True
     groq_api_key: str = ""
-    secret_key: str
-    database_url: str
+    secret_key: str = (
+    "test_secret_key"
+    )
+    database_url: str = (
+    "sqlite:///./test.db"
+    )
+
 
     model_config = SettingsConfigDict(
         env_file=".env",
