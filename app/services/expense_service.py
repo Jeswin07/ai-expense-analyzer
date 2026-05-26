@@ -13,7 +13,7 @@ def create_expense(db: Session, expense_data: ExpenseCreate, user_id: int):
         amount=expense_data.amount,
         category=expense_data.category,
 
-        # BUSINESS ANALYTICS FIELDS
+        # ANALYTICS FIELDS
 
         department=expense_data.department,
         vendor=expense_data.vendor,
