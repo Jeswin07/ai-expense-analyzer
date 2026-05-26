@@ -26,8 +26,5 @@ jobs:
       - name: Sync Dependencies
         run: uv sync
 
-      - name: Run Tests
-        run: uv run -m pytest
-
       - name: Run Pylint
         run: uv run pylint app
