@@ -11,16 +11,27 @@ from app.schemas.expense import ExpenseUpdate
 from app.services.expense_service import delete_expense
 from app.services.expense_service import get_expense_by_id
 from app.services.expense_service import update_expense
+from app.core.dependencies import (
+    get_current_user
+)
 
 router = APIRouter(prefix="/expenses", tags=["Expenses"])
 
 
 @router.post("/", response_model=ExpenseResponse)
 def create_new_expense(
+
     expense: ExpenseCreate,
+
+    current_user = Depends(
+        get_current_user
+    ),
+
     db: Session = Depends(get_db)
 ):
-    return create_expense(db, expense)
+    return create_expense(
+        db, expense, current_user.id
+        )
 
 
 @router.get("/", response_model=list[ExpenseResponse])

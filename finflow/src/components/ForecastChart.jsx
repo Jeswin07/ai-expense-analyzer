@@ -12,6 +12,7 @@ import {
   Area
 } from 'recharts'
 
+
 const CustomTooltip = ({
   active,
   payload,
@@ -19,8 +20,8 @@ const CustomTooltip = ({
 }) => {
 
   if (
-    !active
-    || !payload?.length
+    !active ||
+    !payload?.length
   ) {
     return null
   }
@@ -36,7 +37,8 @@ const CustomTooltip = ({
     ">
 
       <div className="
-        text-dark-200 mb-2
+        text-dark-200
+        mb-2
       ">
 
         {label}
@@ -51,7 +53,8 @@ const CustomTooltip = ({
 
           className="
             flex justify-between
-            gap-4 mb-1
+            gap-4
+            mb-1
           "
         >
 
@@ -83,6 +86,7 @@ const CustomTooltip = ({
   )
 }
 
+
 export default function ForecastChart({
 
   historicalData = [],
@@ -90,11 +94,22 @@ export default function ForecastChart({
   forecastData = []
 }) {
 
-  // Merge datasets
+  // ─────────────────────────────
+  // CONNECT HISTORICAL + FORECAST
+  // ─────────────────────────────
 
-  const formattedHistorical =
+  const lastHistorical =
 
-    historicalData.map((item) => ({
+    historicalData[
+      historicalData.length - 1
+    ]
+
+
+  const combinedData = [
+
+    // Historical
+
+    ...historicalData.map((item) => ({
 
       date: item.date,
 
@@ -105,11 +120,25 @@ export default function ForecastChart({
       upper: null,
 
       lower: null
-    }))
+    })),
 
-  const formattedForecast =
+    // Bridge Point
 
-    forecastData.map((item) => ({
+    {
+      date: lastHistorical?.date,
+
+      actual: lastHistorical?.expense,
+
+      forecast: lastHistorical?.expense,
+
+      upper: lastHistorical?.expense,
+
+      lower: lastHistorical?.expense
+    },
+
+    // Forecast
+
+    ...forecastData.map((item) => ({
 
       date: item.date,
 
@@ -124,13 +153,8 @@ export default function ForecastChart({
       lower:
         item.lower_bound
     }))
-
-  const mergedData = [
-
-    ...formattedHistorical,
-
-    ...formattedForecast
   ]
+
 
   return (
 
@@ -138,7 +162,8 @@ export default function ForecastChart({
       h-full
       bg-dark-700
       border border-dark-500
-      rounded-xl p-5
+      rounded-xl
+      p-5
     ">
 
       {/* Header */}
@@ -146,7 +171,8 @@ export default function ForecastChart({
       <div className="mb-5">
 
         <div className="
-          text-sm text-dark-100
+          text-sm
+          text-dark-100
           font-medium
         ">
 
@@ -155,7 +181,8 @@ export default function ForecastChart({
         </div>
 
         <div className="
-          text-xs text-dark-300
+          text-xs
+          text-dark-300
           mt-1
         ">
 
@@ -168,9 +195,7 @@ export default function ForecastChart({
 
       {/* Chart */}
 
-      <div className="
-        h-80
-      ">
+      <div className="h-80">
 
         <ResponsiveContainer
           width="100%"
@@ -179,7 +204,7 @@ export default function ForecastChart({
 
           <LineChart
 
-            data={mergedData}
+            data={combinedData}
 
             margin={{
               top: 10,
@@ -302,7 +327,7 @@ export default function ForecastChart({
               name="Forecasted Expense"
             />
 
-            {/* Bounds */}
+            {/* Upper Bound */}
 
             <Line
 
@@ -320,6 +345,8 @@ export default function ForecastChart({
 
               name="Upper Bound"
             />
+
+            {/* Lower Bound */}
 
             <Line
 

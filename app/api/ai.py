@@ -21,11 +21,11 @@ from app.services.forecasting_service import (
     forecast_expenses
 )
 
-from app.services.vendor_service import (
-    vendor_segmentation
+from app.services.vendor_segmentation_service import (
+    get_vendor_segmentation
 )
 
-from app.services.anomaly_service import (
+from app.services.anomaly_detection_service import (
     detect_expense_anomalies
 )
 
@@ -58,7 +58,7 @@ def get_ai_summary(
     )
 
     vendors = (
-        vendor_segmentation(db)
+        get_vendor_segmentation(db)
     )
 
     anomalies = (

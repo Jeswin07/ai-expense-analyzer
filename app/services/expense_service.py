@@ -6,8 +6,9 @@ from app.schemas.expense import ExpenseCreate
 from app.schemas.expense import ExpenseUpdate
 
 
-def create_expense(db: Session, expense_data: ExpenseCreate):
+def create_expense(db: Session, expense_data: ExpenseCreate, user_id: int):
     expense = Expense(
+        user_id=user_id,
         title=expense_data.title,
         amount=expense_data.amount,
         category=expense_data.category,

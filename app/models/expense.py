@@ -7,6 +7,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import Float
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import ForeignKey
 
 from app.db.database import Base
 
@@ -19,6 +20,12 @@ class Expense(Base):
         primary_key=True,
         index=True
     )
+
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False
+        )
 
     title = Column(
         String,

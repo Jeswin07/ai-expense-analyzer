@@ -1,5 +1,7 @@
 import pandas as pd
 
+from io import StringIO
+
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import File
@@ -10,6 +12,10 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 
 from app.models.expense import Expense
+
+from app.core.dependencies import (
+    get_current_user
+)
 
 
 router = APIRouter(
@@ -23,31 +29,45 @@ router = APIRouter(
 @router.post("/")
 async def import_expenses_csv(
 
+    current_user = Depends(
+        get_current_user
+    ),
+
     file: UploadFile = File(...),
 
     db: Session = Depends(get_db)
 ):
 
-    # Validate file
+    # ─────────────────────────────
+    # VALIDATE FILE
+    # ─────────────────────────────
 
     if not file.filename.endswith(".csv"):
 
         return {
+
             "error":
                 "Only CSV files are supported."
         }
 
-    # Read CSV
+    # ─────────────────────────────
+    # READ CSV
+    # ─────────────────────────────
 
     contents = await file.read()
 
-    from io import StringIO
-
     csv_data = StringIO(
+
         contents.decode("utf-8")
     )
 
-    df = pd.read_csv(csv_data)
+    df = pd.read_csv(
+        csv_data
+    )
+
+    # ─────────────────────────────
+    # REQUIRED COLUMNS
+    # ─────────────────────────────
 
     required_columns = [
 
@@ -86,7 +106,6 @@ async def import_expenses_csv(
         return {
 
             "error":
-
                 "Missing columns.",
 
             "missing":
@@ -95,11 +114,15 @@ async def import_expenses_csv(
 
     inserted_count = 0
 
-    # Insert rows
+    # ─────────────────────────────
+    # INSERT ROWS
+    # ─────────────────────────────
 
     for _, row in df.iterrows():
 
         expense = Expense(
+
+            user_id=current_user.id,
 
             title=row["title"],
 
